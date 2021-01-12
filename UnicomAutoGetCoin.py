@@ -4,6 +4,7 @@
 
 import http.cookiejar
 import json
+import time
 import os
 import sys
 import urllib.request as urllib2
@@ -12,7 +13,7 @@ import urllib
 import datetime
 import requests
 import ssl
-
+SCKEY = os.environ["SCKEY"]
 ssl._create_default_https_context = ssl._create_unverified_context
 class Qiandao():
 
@@ -40,6 +41,7 @@ class Qiandao():
         req2 = urllib2.Request("http://m.client.10010.com/mobileService/login.htm",headers=headers)
         req2 = urllib2.urlopen(req2,data)
         if req2.getcode() == 200:
+            desp = "登录成功!"+'\n\n'
             print('login success!')
         try:
             for item1 in self.cookie:
@@ -52,14 +54,17 @@ class Qiandao():
         
         req3 = urllib2.Request("https://act.10010.com/SigninApp/signin/querySigninActivity.htm?token=" + a)
         if urllib2.urlopen(req3).getcode() == 200:
+            desp +='querySigninActivity success!'+'\n\n'
             print('querySigninActivity success!')
         
         req4 = urllib2.Request("https://act.10010.com/SigninApp/signin/daySign", "btnPouplePost".encode('utf-8'))
         if urllib2.urlopen(req4).getcode() == 200:
+            desp +='今日签到成功!'+'\n\n'
             print('daySign success!')
             
         req5 = urllib2.Request("https://act.10010.com/SigninApp/signin/getIntegral")
         r = self.opener.open(req5)
+        desp +=' coin: ' + r.read().decode('utf-8')'+'\n\n'
         print( ' coin: ' + r.read().decode('utf-8'))
         
         data2={'stepflag':'22'}
@@ -71,13 +76,20 @@ class Qiandao():
            req6 = self.opener.open(get_req6)
            get_req7 = urllib2.Request("http://act.10010.com/SigninApp/mySignin/addFlow",data3)
            req7 = self.opener.open(get_req7)
+        send_server(desp,SCKEY)
+
+def send_server(content,SCKEY):
+    api = f"https://sc.ftqq.com/{SCKEY}.send"
+    date=time.strftime("%Y-%m-%d", time.localtime())
+    text='联通营业厅'+date
+    data = {
+       "text":text,
+       "desp":content
+    }
+    req = requests.post(api,data = data)
+    
 if __name__ == '__main__':
-
     user = Qiandao()
-
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
     data = timestamp+"这部分自己按要求抓包提取"
-
     user.sign(data)
-
