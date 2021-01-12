@@ -15,6 +15,15 @@ import requests
 import ssl
 SCKEY = os.environ["SCKEY"]
 ssl._create_default_https_context = ssl._create_unverified_context
+def send_server(desp,SCKEY):
+    api = f"https://sc.ftqq.com/{SCKEY}.send"
+    date=time.strftime("%Y-%m-%d", time.localtime())
+    text='联通营业厅'+date
+    data = {
+       "text":text,
+       "desp":desp
+    }
+    req = requests.post(api,data = data)
 class Qiandao():
 
     def __init__(self):
@@ -66,7 +75,7 @@ class Qiandao():
         r = self.opener.open(req5)
         desp +=' coin: ' + r.read().decode('utf-8')'+'\n\n'
         print( ' coin: ' + r.read().decode('utf-8'))
-        
+        send_server(desp,SCKEY)
         data2={'stepflag':'22'}
         data2=urllib.parse.urlencode(data2).encode('utf-8')
         data3={'stepflag':'23'}
@@ -76,17 +85,7 @@ class Qiandao():
            req6 = self.opener.open(get_req6)
            get_req7 = urllib2.Request("http://act.10010.com/SigninApp/mySignin/addFlow",data3)
            req7 = self.opener.open(get_req7)
-        send_server(desp,SCKEY)
-
-def send_server(content,SCKEY):
-    api = f"https://sc.ftqq.com/{SCKEY}.send"
-    date=time.strftime("%Y-%m-%d", time.localtime())
-    text='联通营业厅'+date
-    data = {
-       "text":text,
-       "desp":content
-    }
-    req = requests.post(api,data = data)
+       
     
 if __name__ == '__main__':
     user = Qiandao()
