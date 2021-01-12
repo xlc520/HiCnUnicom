@@ -73,7 +73,7 @@ class Qiandao():
             
         req5 = urllib2.Request("https://act.10010.com/SigninApp/signin/getIntegral")
         r = self.opener.open(req5)
-        desp +=' coin: ' + r.read().decode('utf-8')'+'\n\n'
+        desp +=' coin: ' + r.read().decode('utf-8')+'\n\n'
         print( ' coin: ' + r.read().decode('utf-8'))
         send_server(desp,SCKEY)
         data2={'stepflag':'22'}
