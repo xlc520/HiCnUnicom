@@ -75,7 +75,17 @@ class Qiandao():
         r = self.opener.open(req5)
         desp +=' coin: ' + r.read().decode('utf-8')+'\n\n'
         print( ' coin: ' + r.read().decode('utf-8'))
-        send_server(desp,SCKEY)
+        #server酱通知start
+        api = f"https://sc.ftqq.com/{SCKEY}.send"
+        date=time.strftime("%Y-%m-%d", time.localtime())
+        text='联通营业厅'+date
+        data = {
+           "text":text,
+           "desp":desp
+        }
+        req = requests.post(api,data = data)
+        print(req.text)
+        #server酱通知end
         data2={'stepflag':'22'}
         data2=urllib.parse.urlencode(data2).encode('utf-8')
         data3={'stepflag':'23'}
