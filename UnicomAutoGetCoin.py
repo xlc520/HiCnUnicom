@@ -77,6 +77,7 @@ class Qiandao():
         print( ' coin: ' + r.read().decode('utf-8'))
         #server酱通知start
         api = f"https://sc.ftqq.com/{SCKEY}.send"
+        print(api)
         date=time.strftime("%Y-%m-%d", time.localtime())
         text='联通营业厅'+date
         data = {
@@ -84,6 +85,7 @@ class Qiandao():
            "desp":desp
         }
         req = requests.post(api,data = data)
+        print("server酱通知")
         print(req.text)
         #server酱通知end
         data2={'stepflag':'22'}
